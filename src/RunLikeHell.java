@@ -14,27 +14,34 @@ public class RunLikeHell {
             return blocks[0];
         }
 
-        /** I look at chunks of 4 blocks, because of the following example:
+        /** I look at chunks of 3 blocks, because of the following example:
          *  [7] [8] [7] [1]
          *
-         *  If you choose to jump from block 1 to block 5, you might as well
-         *  stop at block 3 along the way just to add more
+         *  You can choose between 2 beginning paths - start at 7 or 8.
+         *  This then updates to the following afterward based on which number
+         *  results in the largest path based on previous numbers:
          *
-         *  I look at combinations of blocks 1 and 3, 2 and 4, and 1 and 4 to see
-         *  which has the largest sum, then add it to the total in that spot
+         *  [7] [8] [14] [9]
+         *
+         *  Where you aren't allowed to take the sum of the number directly
+         *  before it, but you can take the sum of the number 2 before it or the number
+         *  3 before it.
         */
 
-        int index = 0;
-        int sum = 0;
+        blocks[2] += blocks[0];
+        int max = Math.max(blocks[2], blocks[1]); // keeps track of max value
 
-        do {
-            // take the max of the sums described above for sets of four blocks,
+        // start at fourth block, index 3
+        for (int index = 3; index < blocks.length; index++) {
+
+            // take the max of the sums described above for sets of three blocks,
             // including the current block
-            int sum1 =
+            blocks[index] += Math.max(blocks[index - 3], blocks[index - 2]);
+            if (blocks[index] > max)
+                max = blocks[index];
+        }
 
-        } while (index < blocks.length);
-
-        return sum;
+        return max;
     }
 
     public static double difficultyRating() {
